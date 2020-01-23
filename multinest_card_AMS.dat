@@ -1,0 +1,24 @@
+#
+prefix mnest_ # prefix for multinest output files
+#
+prior loguniform # [uniform, loguniform, user]
+#
+
+loglikelihood indirect     half_gauss 0.01 # [gaussian, half_gauss, user] log10(gauss_width) - for half_gauss
+#
+livepts 1000
+#
+sampling_efficiency model # [model, parameter]
+#
+#parameters to scan over: <param> <min> <max>
+#you can add as many as you want
+scan_parameter Mx 200 1000
+scan_parameter vs 1E-2 1E3
+scan_parameter Cd_nu 1E-2 10E-2
+scan_parameter gamma_d_nu -5 -3
+scan_parameter psi_e_nu 1 1.2
+
+
+#variable you wish to write into the output file (relic, direct_detection, ...)
+#leave empty for all available observables to be written out
+output_variables
