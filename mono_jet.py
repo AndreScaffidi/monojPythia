@@ -8,7 +8,7 @@
 # add process p p > chi chi~ j j NP=1 QCD=2 QED=0 @2
 # output MONO_JET_TEST
 ###################################################
-launch MONO_JET_TEST
+launch MONO_JET_LOW
 shower=Pythia8
 delphes=on
 set C62 0

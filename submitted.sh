@@ -7,7 +7,7 @@
 #SBATCH --mem=8GB         
 #SBATCH -n 32
 ##SBATCH -N 1
-#SBATCH --time=40:00:00
+#SBATCH --time=72:00:00
 ###################################################
 # Initialize environment
 cd
@@ -15,6 +15,8 @@ source activate monoJ
 module load GCC/6.2.0-2.27
 module load GCCcore/6.2.0
 cd /fast/users/a1607156/MG5_ROOT
+
+export TMPDIR=/fast/users/a1607156/tmp
 ###################################################
 # Edit master madgraph scripts
 cp mono_jet_launch.py                    mono_jet_launch_${mass}_${theta}.py
