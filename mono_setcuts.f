@@ -967,4 +967,4 @@ c     Set who comes from decay based on forced BW
       enddo
 
       end
-w
+

@@ -6,11 +6,11 @@ import os
 import numpy as np
 #############################
 # Define parameter ranges
-# NOW OFR LOW MASS
+# NOW FOR ALL MASSES
 # Dim-6 case
-# Grid_size    = 4   
-# MASS         = np.linspace(1,150,Grid_size)
-# THETA        = np.linspace(0,np.pi,Grid_size)
+# Grid_size    = 19   
+# MASS         = np.linspace(1,1000,Grid_size)
+# THETA        = np.linspace(0,np.pi,Grid_size) 
 # Dim-7 case
 Grid_size    = 19   
 MASS         = np.linspace(1,1000,Grid_size)
@@ -32,11 +32,13 @@ if DIM == 6:
                                 for th in THETA:
                                         # print O1,O2
                                         os.system('sbatch --job-name=m%1.2F_th%1.2F.run --output=m%1.2F_th%1.2F.out --export=mass=%1.2F,theta=%1.2F,C1=%1.2F,C2=%1.2F,NEvents=%d,O1=%s,O2=%s submitted_cutflow.sh' %(m,th,m,th,m,th,np.sin(th),np.cos(th),nevents,O1,O2))
+
                 else:   
                         for m in MASS:
                                 for th in THETA:
-                                        # print O1,O2
                                         os.system('sbatch --job-name=m%1.2F_th%1.2F.run --output=m%1.2F_th%1.2F.out --export=mass=%1.2F,theta=%1.2F,C1=%1.2F,C2=%1.2F,NEvents=%d,O1=%s,O2=%s submitted.sh' %(m,th,m,th,m,th,np.sin(th),np.cos(th),nevents,O1,O2))
+                                        # exit(0)
+
         # Submit C2 and C3
         elif PAIR == 2:
                 O1 = str('C62')

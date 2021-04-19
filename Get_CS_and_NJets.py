@@ -14,18 +14,18 @@ import itertools
 import json
 #############################
 # Dim-6
-# Grid_size = 4
-# MASS      = np.linspace(1,150,Grid_size)
-# THETA     = np.linspace(0,np.pi,Grid_size)  
-# Dim-7
+# Grid_size    = 19   
+# MASS         = np.linspace(1,1000,Grid_size)
+# THETA        = np.linspace(0,np.pi,Grid_size)
+Dim-7
 Grid_size = 19    
 MASS      = np.linspace(1,1000,Grid_size)
 #############################
 # Get data
 FILES  = {"ATLAS":"NUMBER_OF_M_JETS.csv","CMS":"NUMBER_OF_M_JETS_CMS.csv"}
-DIR    = {1:'C62_C63_low', 2: 'C61_C64_low', 3:'C62_C63', 4: 'C61_C64'} # just need to change to _low
+DIR    = {3:'C62_C63', 4: 'C61_C64'} # just need to change to _low
 DIR7   = {1:'C71', 2: 'C72', 3:'C73', 4: 'C74'} # just need to change to _low
-BIN_S  = {"ATLAS": 10,"CMS":22}
+BIN_S  = {"ATLAS": 11,"CMS":22}
 def get_dim_6():
 	for group,name in DIR.items():
 		print "For opperator combination %s..." %(name)
@@ -35,12 +35,18 @@ def get_dim_6():
 			MET_BINS = []
 			for m in MASS:  
 				for th in THETA:
-					if os.path.exists('%s/MONO_JET_%1.2F_%1.2F/Events/run_01/%s' %(name,m,th,file)):
+					if os.path.exists('%s_139invfb/MONO_JET_%1.2F_%1.2F/Events/run_01/tag_1_pythia8_events.hepmc.gz' %(name,m,th)):
+						print "Removing hep MC file..."
+						os.system('rm %s_139invfb/MONO_JET_%1.2F_%1.2F/Events/run_01/tag_1_pythia8_events.hepmc.gz'  %(name,m,th))
+					if os.path.isdir('%s_139invfb/MONO_JET_%1.2F_%1.2F/SubProcesses'  %(name,m,th)):
+						print("Deleting Subrocesses...")
+						os.system('rm -rf %s_139invfb/MONO_JET_%1.2F_%1.2F/SubProcesses'  %(name,m,th))
+					if os.path.exists('%s_139invfb/MONO_JET_%1.2F_%1.2F/Events/run_01/%s' %(name,m,th,file)):
 						# Do not include nans ************ just remove points
-						binInfo                  = np.loadtxt('%s/MONO_JET_%1.2F_%1.2F/Events/run_01/%s'%(name,m,th,file)) 
+						binInfo                  = np.loadtxt('%s_139invfb/MONO_JET_%1.2F_%1.2F/Events/run_01/%s'%(name,m,th,file)) 
 						nJets                    = binInfo[5,0]
-						CS_data                  = np.loadtxt('%s/MONO_JET_%1.2F_%1.2F/Events/run_01/tag_1_merged_xsecs.txt'%(name,m,th),skiprows=1) 
-						DATA.append([float(m),float(th),nJets,float(CS_data[2,1])])
+						CS_data                  = np.loadtxt('%s_139invfb/MONO_JET_%1.2F_%1.2F/Events/run_01/tag_1_merged_xsecs.txt'%(name,m,th),skiprows=1) 
+						DATA.append([float(m),float(th),nJets,float(CS_data[1])])
 						# print "Size of met_bins  = ", len(binInfo)
 						# print "For experiment: ", experiment 
 						MET_BINS.append(binInfo[:,2][:-1])
@@ -56,21 +62,21 @@ def get_dim_6():
 			# Generate text output
 			DATA    = np.array(DATA)
 			MET_BINS= np.array(MET_BINS) 
+			print(DATA)
+			print MET_BINS
 			#############################
-			# # BE CAREFUL ################
-			# np.savetxt('Grid_Interpolator/grid_output_%s_%s.txt'%(experiment,name)                                     ,np.c_[DATA],fmt="%f")
-			# np.savetxt('Grid_Interpolator/X_Y_%s_%s.txt' %(experiment,name)                                            ,np.c_[MASS,THETA],fmt="%f")
-			# np.savetxt('Grid_Interpolator/met_hist_%s_%s.txt' %(experiment,name)                                       ,np.c_[MET_BINS],fmt="%f")
+			# BE CAREFUL ################
+			np.savetxt('Grid_Interpolator/grid_output_%s_139invfb_%s.txt'%(experiment,name)                                     ,np.c_[DATA],fmt="%f")
+			np.savetxt('Grid_Interpolator/X_Y_%s_139invfb_%s.txt' %(experiment,name)                                            ,np.c_[MASS,THETA],fmt="%f")
+			np.savetxt('Grid_Interpolator/met_hist_%s_139invfb_%s.txt' %(experiment,name)                                       ,np.c_[MET_BINS],fmt="%f")
 			
 
-			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/grid_output_%s_%s.txt'%(experiment,name) ,np.c_[DATA],fmt="%f")
-			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/X_Y_%s_%s.txt' %(experiment,name)        ,np.c_[MASS,THETA],fmt="%f")
-			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/met_hist_%s_%s.txt' %(experiment,name)   ,np.c_[MET_BINS],fmt="%f")
+			# np.savetxt('/hpcfs/users/a1607156/gambit/ColliderBit/data/DMEFT/X_Y_%s_%s.txt' %(experiment,name)        ,np.c_[MASS,THETA],fmt="%f")
+			# np.savetxt('/hpcfs/users/a1607156/gambit/ColliderBit/data/DMEFT/met_hist_%s_%s.txt' %(experiment,name)   ,np.c_[MET_BINS],fmt="%f")
+			# np.savetxt('/hpcfs/users/a1607156/gambit/ColliderBit/data/DMEFT/grid_output_%s_%s.txt'%(experiment,name) ,np.c_[DATA],fmt="%f")
 			
 
 
-			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/grid_output_%s_%s.txt'%(experiment,name) ,np.c_[DATA],fmt="%f")
-			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/X_Y_%s_%s.txt' %(experiment,name)        ,np.c_[MASS,THETA],fmt="%f")
 
 def get_dim_7():
 	for group,name in DIR7.items():
@@ -80,10 +86,10 @@ def get_dim_7():
 			DATA     = []
 			MET_BINS = []
 			for m in MASS:  
-				if os.path.exists('%s/MONO_JET_%s_%1.2F/Events/run_01/%s' %(name,name,m,file)):
+				if os.path.exists('%s_139invfb/MONO_JET_%s_%1.2F/Events/run_01/%s' %(name,name,m,file)):
 					# Do not include nans ************ just remove points
-					binInfo                  = np.loadtxt('%s/MONO_JET_%s_%1.2F/Events/run_01/%s'%(name,name,m,file)) 
-					CS_data                  = np.loadtxt('%s/MONO_JET_%s_%1.2F/Events/run_01/tag_1_merged_xsecs.txt'%(name,name,m),skiprows=1) 
+					binInfo                  = np.loadtxt('%s_139invfb/MONO_JET_%s_%1.2F/Events/run_01/%s'%(name,name,m,file)) 
+					CS_data                  = np.loadtxt('%s_139invfb/MONO_JET_%s_%1.2F/Events/run_01/tag_1_merged_xsecs.txt'%(name,name,m),skiprows=1) 
 					DATA.append([float(m),float(CS_data[2,1])])
 					# print "Size of met_bins  = ", len(binInfo)
 					# print "For experiment: ", experiment 
@@ -102,21 +108,21 @@ def get_dim_7():
 			MET_BINS= np.array(MET_BINS) 
 			#############################
 			# # BE CAREFUL ################
-			np.savetxt('Grid_Interpolator/grid_output_%s_%s.txt'%(experiment,name)                                     ,np.c_[DATA],fmt="%f")
-			np.savetxt('Grid_Interpolator/X_Y_%s_%s.txt' %(experiment,name)                                            ,np.c_[MASS],fmt="%f")
-			np.savetxt('Grid_Interpolator/met_hist_%s_%s.txt' %(experiment,name)                                       ,np.c_[MET_BINS],fmt="%f")
+			np.savetxt('Grid_Interpolator/grid_output_%s_139invfb_%s.txt'%(experiment,name)                                     ,np.c_[DATA],fmt="%f")
+			np.savetxt('Grid_Interpolator/X_Y_%s_139invfb_%s.txt' %(experiment,name)                                            ,np.c_[MASS],fmt="%f")
+			np.savetxt('Grid_Interpolator/met_hist_%s_139invfb_%s.txt' %(experiment,name)                                       ,np.c_[MET_BINS],fmt="%f")
 			
+
+			# np.savetxt('/hpcfs/users/a1607156/gambit/ColliderBit/data/DMEFT/grid_output_%s_%s.txt'%(experiment,name) ,np.c_[DATA],fmt="%f")
+			# np.savetxt('/hpcfs/users/a1607156/gambit/ColliderBit/data/DMEFT/X_Y_%s_%s.txt' %(experiment,name)        ,np.c_[MASS,THETA],fmt="%f")
+			# np.savetxt('/hpcfs/users/a1607156/gambit/ColliderBit/data/DMEFT/met_hist_%s_%s.txt' %(experiment,name)   ,np.c_[MET_BINS],fmt="%f")
+			
+
 
 			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/grid_output_%s_%s.txt'%(experiment,name) ,np.c_[DATA],fmt="%f")
 			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/X_Y_%s_%s.txt' %(experiment,name)        ,np.c_[MASS,THETA],fmt="%f")
-			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/met_hist_%s_%s.txt' %(experiment,name)   ,np.c_[MET_BINS],fmt="%f")
-			
 
-
-			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/grid_output_%s_%s.txt'%(experiment,name) ,np.c_[DATA],fmt="%f")
-			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/X_Y_%s_%s.txt' %(experiment,name)        ,np.c_[MASS,THETA],fmt="%f")
-
-get_dim_7()
+get_dim_6()
 
 
 
