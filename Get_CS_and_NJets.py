@@ -17,9 +17,9 @@ import json
 # Grid_size    = 19   
 # MASS         = np.linspace(1,1000,Grid_size)
 # THETA        = np.linspace(0,np.pi,Grid_size)
-Dim-7
-Grid_size = 19    
-MASS      = np.linspace(1,1000,Grid_size)
+# Dim-7
+Grid_size    = 19   
+MASS         = np.linspace(1,1000,Grid_size)
 #############################
 # Get data
 FILES  = {"ATLAS":"NUMBER_OF_M_JETS.csv","CMS":"NUMBER_OF_M_JETS_CMS.csv"}
@@ -90,14 +90,14 @@ def get_dim_7():
 					# Do not include nans ************ just remove points
 					binInfo                  = np.loadtxt('%s_139invfb/MONO_JET_%s_%1.2F/Events/run_01/%s'%(name,name,m,file)) 
 					CS_data                  = np.loadtxt('%s_139invfb/MONO_JET_%s_%1.2F/Events/run_01/tag_1_merged_xsecs.txt'%(name,name,m),skiprows=1) 
-					DATA.append([float(m),float(CS_data[2,1])])
+					DATA.append([float(m),float(CS_data[1])])
 					# print "Size of met_bins  = ", len(binInfo)
 					# print "For experiment: ", experiment 
 					MET_BINS.append(binInfo[:,2][:-1])
 				else:
-					print "Uncompleted run! mass = %1.2F, th = %1.2F" %(m,th)
+					print "Uncompleted run! mass = %1.2F" %(m)
 					# continue
-					print "Padding bin entries as placeholder..."   
+					print "Padding bentries as placeholder..."   
 					# CS_data                  = np.loadtxt('%s/MONO_JET_%1.2F_%1.2F/Events/run_01/tag_1_merged_xsecs.txt'%(name,m,th),skiprows=1) 
 					DATA.append([float(m),-1])
 					# print "Size of met_bins  = ", len(binInfo)
@@ -122,7 +122,7 @@ def get_dim_7():
 			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/grid_output_%s_%s.txt'%(experiment,name) ,np.c_[DATA],fmt="%f")
 			# np.savetxt('/fast/users/a1607156/gambitgit/ColliderBit/data/DMEFT/X_Y_%s_%s.txt' %(experiment,name)        ,np.c_[MASS,THETA],fmt="%f")
 
-get_dim_6()
+get_dim_7()
 
 
 
